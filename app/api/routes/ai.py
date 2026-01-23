@@ -68,11 +68,3 @@ def rewrite_from_policy(
             status_code=400,
             detail=f"Rewrite blocked by validation. {err}",
         )
-    return RewriteFromPolicyOut(
-        policy_id=payload.policy_id,
-        template_name=payload.template_name,
-        tone=payload.tone,
-        channel=channel,
-        base_draft=base_draft,
-        rewritten_draft=rewritten,
-    )
