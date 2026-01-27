@@ -24,7 +24,7 @@ def rewrite_message(*, text: str, tone: str, channel: str) -> str:
     )
 
     length_rule = (
-        "Keep it under 320 characters."
+        "Keep it under 60 characters."
         if channel == "sms"
         else "Keep it concise and professional."
     )

@@ -15,6 +15,7 @@ class PolicyCreate(BaseModel):
 
 class PolicyOut(BaseModel):
     id: int
+    agency_id: int
     customer_id: int
     policy_number: str
     carrier: str

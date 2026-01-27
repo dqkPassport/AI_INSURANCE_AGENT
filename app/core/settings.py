@@ -12,5 +12,9 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    jwt_secret: str = "change-me"
+    jwt_alg: str = "HS256"
+    access_token_expire_minutes: int = 60
+
 
 settings = Settings()

@@ -1,5 +1,8 @@
 from datetime import date
 from pydantic import BaseModel
+from typing import Literal
+
+priority = Literal["low", "normal", "high"]
 
 
 class TaskCreate(BaseModel):
@@ -7,6 +10,7 @@ class TaskCreate(BaseModel):
     policy_id: int | None = None
     title: str
     due_date: date
+    priority: str = "normal"
 
 
 class TaskOut(BaseModel):
@@ -16,5 +20,6 @@ class TaskOut(BaseModel):
     title: str
     due_date: date
     status: str
+    priority: str
 
     model_config = {"from_attributes": True}

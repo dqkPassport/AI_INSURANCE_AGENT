@@ -28,7 +28,9 @@ def rewrite(payload: RewriteRequest):
 
 @router.post("/rewrite-from-policy", response_model=RewriteFromPolicyOut)
 def rewrite_from_policy(
-    payload: RewriteFromPolicyRequest, db: Session = Depends(get_db)
+    payload: RewriteFromPolicyRequest,
+    strict: bool = True,
+    db: Session = Depends(get_db),
 ):
     try:
         template_channel, base_draft = build_renewal_draft_text(
@@ -63,8 +65,21 @@ def rewrite_from_policy(
     db.add(log)
     db.commit()
     db.refresh
-    if not ok:
+    if not ok and strict:
         raise HTTPException(
             status_code=400,
             detail=f"Rewrite blocked by validation. {err}",
         )
+    warning = None
+    if not ok and not strict:
+        warning = f"Validation failed :{err}"
+
+    return RewriteFromPolicyOut(
+        policy_id=payload.policy_id,
+        template_name=payload.template_name,
+        tone=payload.tone,
+        channel=channel,
+        base_draft=base_draft,
+        rewritten_draft=rewritten,
+        warning=warning,
+    )

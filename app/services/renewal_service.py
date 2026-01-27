@@ -17,7 +17,9 @@ class RenewalItem:
     is_shock: bool
 
 
-def _calc_increase(old_premium: float, renewal_premium: float | None) -> tuple[float | None, float | None]:
+def _calc_increase(
+    old_premium: float, renewal_premium: float | None
+) -> tuple[float | None, float | None]:
     """
     Returns (increase_amount, increase_pct).
     If renewal_premium is None, returns (None, None).
@@ -35,7 +37,9 @@ def _calc_increase(old_premium: float, renewal_premium: float | None) -> tuple[f
     return increase_amount, increase_pct
 
 
-def get_renewals(db: Session, *, days: int, shock_threshold: float) -> list[RenewalItem]:
+def get_renewals(
+    db: Session, *, days: int, shock_threshold: float, agency_id: int
+) -> list[RenewalItem]:
     """
     Get policies expiring within the next `days`.
     Adds computed fields:
@@ -49,7 +53,11 @@ def get_renewals(db: Session, *, days: int, shock_threshold: float) -> list[Rene
     policies = (
         db.query(Policy)
         .options(joinedload(Policy.customer))
-        .filter(Policy.expiration_date >= today, Policy.expiration_date <= end_date)
+        .filter(
+            Policy.agency_id == agency_id,
+            Policy.expiration_date >= today,
+            Policy.expiration_date <= end_date,
+        )
         .order_by(Policy.expiration_date.asc())
         .all()
     )

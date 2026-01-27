@@ -5,6 +5,7 @@ from app.api.deps import get_db
 from app.core.config import DEFAULT_RENEWAL_DAYS, DEFAULT_SHOCK_THRESHOLD
 from app.schemas.renewal import RenewalOut
 from app.services.renewal_service import get_renewals
+from app.core.tenant import get_agency_id
 
 router = APIRouter(prefix="/renewals", tags=["renewals"])
 
@@ -14,6 +15,7 @@ def list_renewals(
     days: int = Query(DEFAULT_RENEWAL_DAYS, ge=1, le=365),
     shock_threshold: float = Query(DEFAULT_SHOCK_THRESHOLD, ge=0, le=1),
     db: Session = Depends(get_db),
+    agency_id: int = Depends(get_agency_id),
 ):
     items = get_renewals(db, days=days, shock_threshold=shock_threshold)
 

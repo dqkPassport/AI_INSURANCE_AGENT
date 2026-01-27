@@ -27,3 +27,4 @@ class RewriteFromPolicyOut(BaseModel):
     channel: str
     base_draft: str
     rewritten_draft: str
+    warning: str | None = None

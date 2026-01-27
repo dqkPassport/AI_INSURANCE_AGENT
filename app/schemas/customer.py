@@ -9,6 +9,7 @@ class CustomerCreate(BaseModel):
 
 class CustomerOut(BaseModel):
     id: int
+    agency_id: int
     full_name: str
     email: str | None
     phone: str | None

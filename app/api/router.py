@@ -10,6 +10,8 @@ from app.api.routes.templates import router as templates_router
 from app.api.routes.drafts import router as drafts_router
 from app.api.routes.ai import router as ai_router
 from app.api.routes.ai_logs import router as ai_logs_router
+from app.api.routes.agencies import router as agencies_router
+from app.api.routes.auth import router as auth_router
 
 api_router = APIRouter()
 api_router.include_router(customers_router)
@@ -23,3 +25,5 @@ api_router.include_router(templates_router)
 api_router.include_router(drafts_router)
 api_router.include_router(ai_router)
 api_router.include_router(ai_logs_router)
+api_router.include_router(agencies_router)
+api_router.include_router(auth_router)
