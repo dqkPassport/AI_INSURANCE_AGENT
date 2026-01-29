@@ -9,7 +9,7 @@ class Task(Base):
     __tablename__ = "tasks"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-
+    agency_id: Mapped[int] = mapped_column(ForeignKey("agencies.id"), index=True)
     customer_id: Mapped[int] = mapped_column(ForeignKey("customers.id"), index=True)
     policy_id: Mapped[int | None] = mapped_column(
         ForeignKey("policies.id"), nullable=True, index=True

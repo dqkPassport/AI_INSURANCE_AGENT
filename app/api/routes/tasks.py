@@ -4,13 +4,18 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_db
 from app.models.task import Task
 from app.schemas.task import TaskCreate, TaskOut
+from app.core.auth_deps import get_current_agency_id
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
 @router.post("", response_model=TaskOut)
-def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
-    task = Task(**payload.model_dump())
+def create_task(
+    payload: TaskCreate,
+    db: Session = Depends(get_db),
+    agency_id: int = Depends(get_current_agency_id),
+):
+    task = Task(agency_id=agency_id, **payload.model_dump())
     db.add(task)
     db.commit()
     db.refresh(task)
