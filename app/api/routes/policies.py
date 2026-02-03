@@ -7,6 +7,7 @@ from app.schemas.policy import PolicyCreate, PolicyOut
 from app.core.tenant import get_agency_id
 from app.models.customer import Customer
 from app.core.auth_deps import get_current_agency_id
+from app.services.access_control import get_customer_or_404
 
 router = APIRouter(prefix="/policies", tags=["policies"])
 
@@ -18,18 +19,25 @@ def create_policy(
     agency_id: int = Depends(get_current_agency_id),
 ):
     # 1) Verify customer exists and belongs to this agency
-    customer = (
-        db.query(Customer)
-        .filter(Customer.id == payload.customer_id, Customer.agency_id == agency_id)
-        .first()
+    customer = get_customer_or_404(
+        db=Session, agency_id=agency_id, customer_id=payload.customer_id
     )
-    if not customer:
-        raise HTTPException(
-            status_code=400, detail="Customer not found for this agency"
-        )
+    # customer = (
+    #     db.query(Customer)
+    #     .filter(Customer.id == payload.customer_id, Customer.agency_id == agency_id)
+    #     .first()
+    # )
+    # if not customer:
+    #     raise HTTPException(
+    #         status_code=400, detail="Customer not found for this agency"
+    #     )
 
     # 2) Create policy inside this agency
-    policy = Policy(agency_id=agency_id, **payload.model_dump())
+    policy = Policy(
+        agency_id=agency_id,
+        customer_id=customer.id,
+        **payload.model_dump(),
+    )
     db.add(policy)
     db.commit()
     db.refresh(policy)

@@ -16,6 +16,10 @@ from app.api.routes.auth import router as auth_router
 
 from app.api.routes.interactions import router as interactions_router
 from app.api.routes.timeline import router as timeline_router
+from app.api.routes.dashboard import router as dashboard_router
+from app.api.routes.ai_draft import router as ai_draft_router
+from app.api.routes.ai_suggestions import router as ai_suggestion_router
+from app.api.routes.ai_actions import router as ai_actions_router
 
 api_router = APIRouter()
 api_router.include_router(customers_router)
@@ -32,3 +36,7 @@ api_router.include_router(ai_logs_router)
 api_router.include_router(agencies_router)
 api_router.include_router(auth_router)
 api_router.include_router(timeline_router)
+api_router.include_router(dashboard_router)
+api_router.include_router(ai_draft_router)
+api_router.include_router(ai_suggestion_router)
+api_router.include_router(ai_actions_router)
